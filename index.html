@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Gerador de Prompt de Vendas para a NewTvs">
     <title>Gerador de Prompt de Vendas - NewTvs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #4a6fa5;
@@ -13,8 +14,10 @@
             --light-color: #f8f9fa;
             --dark-color: #343a40;
             --success-color: #28a745;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --warning-color: #ffc107;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
 
         * {
@@ -25,13 +28,14 @@
         }
 
         body {
-            background-color: #f5f7fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
             color: var(--dark-color);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -39,21 +43,36 @@
         header {
             text-align: center;
             margin-bottom: 30px;
-            padding: 20px;
+            padding: 30px 20px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
         }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
+            position: relative;
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             opacity: 0.9;
+            position: relative;
         }
 
         .main-content {
@@ -62,25 +81,46 @@
             gap: 30px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
             
             h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
         }
 
         .form-section, .result-section {
             background-color: white;
-            padding: 25px;
+            padding: 30px;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .form-section:hover, .result-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 1.5rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            position: relative;
         }
 
         label {
@@ -88,70 +128,116 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--dark-color);
+            display: flex;
+            align-items: center;
+        }
+
+        label i {
+            margin-right: 8px;
+            color: var(--primary-color);
+            width: 20px;
+            text-align: center;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
+            padding: 14px;
+            border: 2px solid #e1e5eb;
             border-radius: var(--border-radius);
             font-size: 1rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: var(--transition);
+            background-color: #fafbfc;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+            background-color: white;
         }
 
         textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
         .btn {
-            display: inline-block;
-            background-color: var(--primary-color);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 24px;
             font-size: 1rem;
             font-weight: 600;
             border-radius: var(--border-radius);
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: var(--transition);
             width: 100%;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .btn:hover {
-            background-color: var(--secondary-color);
             transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
         }
 
         .btn:active {
             transform: translateY(0);
         }
 
+        .btn i {
+            margin-right: 8px;
+        }
+
         .btn-copy {
-            background-color: var(--success-color);
-            margin-top: 15px;
+            background: linear-gradient(to right, var(--success-color), #20c997);
+            margin-top: 20px;
         }
 
         .btn-copy:hover {
-            background-color: #218838;
+            background: linear-gradient(to right, #218838, #1ea085);
+        }
+
+        .btn-reset {
+            background: linear-gradient(to right, #6c757d, #868e96);
+            margin-top: 15px;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(to right, #5a6268, #727b84);
         }
 
         .result-box {
             background-color: #f8f9fa;
-            border: 1px solid #e9ecef;
+            border: 2px dashed #e9ecef;
             border-radius: var(--border-radius);
-            padding: 20px;
-            min-height: 400px;
+            padding: 25px;
+            min-height: 450px;
             white-space: pre-line;
             overflow-y: auto;
             font-family: 'Courier New', monospace;
             line-height: 1.5;
+            transition: var(--transition);
+        }
+
+        .result-box:empty::before {
+            content: "Preencha o formulário ao lado para gerar seu prompt de vendas personalizado.";
+            color: #6c757d;
+            font-style: italic;
         }
 
         .hidden {
@@ -168,77 +254,214 @@
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: var(--transition);
             z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification i {
+            margin-right: 10px;
+            font-size: 1.2rem;
         }
 
         .notification.show {
             opacity: 1;
         }
 
+        .char-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: var(--primary-color);
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
         footer {
             text-align: center;
-            margin-top: 40px;
-            padding: 20px;
+            margin-top: 50px;
+            padding: 25px;
             color: #6c757d;
             font-size: 0.9rem;
+            border-top: 1px solid #e9ecef;
         }
 
         .company-logo {
             font-weight: bold;
             color: var(--primary-color);
             font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .company-logo i {
+            margin-right: 5px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .prompt-preview {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .prompt-preview h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .prompt-preview h3 i {
+            margin-right: 10px;
+        }
+
+        .history-item {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .history-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .history-item .date {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Gerador de Prompt de Vendas</h1>
+            <h1><i class="fas fa-robot"></i> Gerador de Prompt de Vendas</h1>
             <p class="subtitle">Crie prompts eficientes para suas estratégias de vendas</p>
         </header>
 
         <div class="main-content">
             <section class="form-section">
-                <h2>Informações do Prompt</h2>
+                <div class="section-title">
+                    <i class="fas fa-edit"></i>
+                    <h2>Informações do Prompt</h2>
+                </div>
                 <form id="promptForm">
                     <div class="form-group">
-                        <label for="username">Nome de usuário:</label>
+                        <label for="username">
+                            <i class="fas fa-user"></i>Nome de usuário:
+                        </label>
                         <input type="text" id="username" name="username" placeholder="Digite seu nome" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="supplier">Nome do fornecedor:</label>
+                        <label for="supplier">
+                            <i class="fas fa-truck"></i>Nome do fornecedor:
+                            <div class="tooltip">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="tooltiptext">Nome da empresa ou pessoa que fornece o produto/serviço</span>
+                            </div>
+                        </label>
                         <input type="text" id="supplier" name="supplier" placeholder="Nome do fornecedor" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="question">O que o vendedor quer saber:</label>
+                        <label for="question">
+                            <i class="fas fa-question-circle"></i>O que o vendedor quer saber:
+                        </label>
                         <textarea id="question" name="question" placeholder="Descreva o que o vendedor precisa saber" required></textarea>
+                        <div class="char-counter"><span id="question-counter">0</span>/500 caracteres</div>
                     </div>
 
                     <div class="form-group">
-                        <label for="subject">O que se trata:</label>
+                        <label for="subject">
+                            <i class="fas fa-comment-alt"></i>O que se trata:
+                        </label>
                         <textarea id="subject" name="subject" placeholder="Descreva o assunto principal" required></textarea>
+                        <div class="char-counter"><span id="subject-counter">0</span>/300 caracteres</div>
                     </div>
 
                     <div class="form-group">
-                        <label for="testHours">Quantas horas de teste:</label>
+                        <label for="testHours">
+                            <i class="fas fa-clock"></i>Quantas horas de teste:
+                        </label>
                         <input type="number" id="testHours" name="testHours" min="0" max="100" value="2" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="planDays">Quantos dias tem o plano:</label>
+                        <label for="planDays">
+                            <i class="fas fa-calendar-alt"></i>Quantos dias tem o plano:
+                        </label>
                         <input type="number" id="planDays" name="planDays" min="1" max="365" value="30" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="company">Nome da Empresa:</label>
-                        <input type="text" id="company" name="company" value="NewTvs" readonly>
+                        <label for="company">
+                            <i class="fas fa-building"></i>Nome da Empresa:
+                        </label>
+                        <div class="input-with-icon">
+                            <input type="text" id="company" name="company" value="NewTvs" readonly>
+                            <i class="fas fa-lock"></i>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="app">Qual App está usando?</label>
+                        <label for="app">
+                            <i class="fas fa-mobile-alt"></i>Qual App está usando?
+                        </label>
                         <select id="app" name="app" required>
                             <option value="">Selecione um app</option>
                             <option value="WhatsApp">WhatsApp</option>
@@ -250,36 +473,95 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn">Gerar Prompt</button>
+                    <button type="submit" class="btn pulse">
+                        <i class="fas fa-magic"></i>Gerar Prompt
+                    </button>
+                    <button type="button" id="resetBtn" class="btn btn-reset">
+                        <i class="fas fa-eraser"></i>Limpar Formulário
+                    </button>
                 </form>
             </section>
 
             <section class="result-section">
-                <h2>Prompt Gerado</h2>
-                <div id="resultBox" class="result-box">
-                    <p>Preencha o formulário ao lado para gerar seu prompt de vendas personalizado.</p>
+                <div class="section-title">
+                    <i class="fas fa-file-alt"></i>
+                    <h2>Prompt Gerado</h2>
                 </div>
-                <button id="copyBtn" class="btn btn-copy hidden">Copiar Prompt</button>
+                <div id="resultBox" class="result-box"></div>
+                <button id="copyBtn" class="btn btn-copy hidden">
+                    <i class="fas fa-copy"></i>Copiar Prompt
+                </button>
+                
+                <div class="prompt-preview">
+                    <h3><i class="fas fa-history"></i>Histórico Rápido</h3>
+                    <div id="historyList">
+                        <div class="history-item" data-template="venda-produto">
+                            <strong>Venda de Produto</strong>
+                            <div class="date">Template pré-definido</div>
+                        </div>
+                        <div class="history-item" data-template="agendamento-teste">
+                            <strong>Agendamento de Teste</strong>
+                            <div class="date">Template pré-definido</div>
+                        </div>
+                        <div class="history-item" data-template="pos-venda">
+                            <strong>Pós-Venda</strong>
+                            <div class="date">Template pré-definido</div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
 
         <footer>
-            <p>&copy; <span id="currentYear"></span> <span class="company-logo">NewTvs</span> - Todos os direitos reservados</p>
+            <p>&copy; <span id="currentYear"></span> <span class="company-logo"><i class="fas fa-tv"></i>NewTvs</span> - Todos os direitos reservados</p>
+            <div class="stats">
+                <span>Prompts gerados: <span id="promptsGenerated">0</span></span>
+                <span>Última geração: <span id="lastGeneration">Nunca</span></span>
+            </div>
         </footer>
     </div>
 
-    <div id="notification" class="notification">Prompt copiado para a área de transferência!</div>
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Prompt copiado para a área de transferência!</span>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Definir ano atual no footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
+            // Elementos DOM
             const form = document.getElementById('promptForm');
             const resultBox = document.getElementById('resultBox');
             const copyBtn = document.getElementById('copyBtn');
+            const resetBtn = document.getElementById('resetBtn');
             const notification = document.getElementById('notification');
+            const questionCounter = document.getElementById('question-counter');
+            const subjectCounter = document.getElementById('subject-counter');
+            const promptsGenerated = document.getElementById('promptsGenerated');
+            const lastGeneration = document.getElementById('lastGeneration');
+            const historyList = document.getElementById('historyList');
             
+            // Carregar dados salvos
+            let generatedCount = localStorage.getItem('promptsGenerated') || 0;
+            promptsGenerated.textContent = generatedCount;
+            
+            const lastGenDate = localStorage.getItem('lastGeneration');
+            if (lastGenDate) {
+                lastGeneration.textContent = new Date(lastGenDate).toLocaleString('pt-BR');
+            }
+            
+            // Contadores de caracteres
+            document.getElementById('question').addEventListener('input', function() {
+                questionCounter.textContent = this.value.length;
+            });
+            
+            document.getElementById('subject').addEventListener('input', function() {
+                subjectCounter.textContent = this.value.length;
+            });
+            
+            // Gerar prompt
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -301,18 +583,28 @@
                 
                 // Mostrar botão de copiar
                 copyBtn.classList.remove('hidden');
+                
+                // Atualizar estatísticas
+                generatedCount++;
+                promptsGenerated.textContent = generatedCount;
+                localStorage.setItem('promptsGenerated', generatedCount);
+                
+                const now = new Date();
+                lastGeneration.textContent = now.toLocaleString('pt-BR');
+                localStorage.setItem('lastGeneration', now.toISOString());
+                
+                // Adicionar ao histórico
+                addToHistory(username, supplier, subject, now);
             });
             
+            // Copiar prompt
             copyBtn.addEventListener('click', function() {
                 // Copiar o texto para a área de transferência
                 if (navigator.clipboard) {
                     navigator.clipboard.writeText(resultBox.textContent)
                         .then(() => {
                             // Mostrar notificação
-                            notification.classList.add('show');
-                            setTimeout(() => {
-                                notification.classList.remove('show');
-                            }, 3000);
+                            showNotification('Prompt copiado para a área de transferência!');
                         })
                         .catch(err => {
                             console.error('Erro ao copiar texto: ', err);
@@ -323,6 +615,33 @@
                 }
             });
             
+            // Resetar formulário
+            resetBtn.addEventListener('click', function() {
+                form.reset();
+                resultBox.textContent = '';
+                copyBtn.classList.add('hidden');
+                questionCounter.textContent = '0';
+                subjectCounter.textContent = '0';
+            });
+            
+            // Templates de histórico
+            historyList.addEventListener('click', function(e) {
+                const historyItem = e.target.closest('.history-item');
+                if (historyItem) {
+                    const template = historyItem.dataset.template;
+                    loadTemplate(template);
+                }
+            });
+            
+            // Funções auxiliares
+            function showNotification(message) {
+                notification.querySelector('span').textContent = message;
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
             // Fallback para navegadores mais antigos
             function fallbackCopyTextToClipboard(text) {
                 const textArea = document.createElement("textarea");
@@ -332,12 +651,10 @@
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    notification.classList.add('show');
-                    setTimeout(() => {
-                        notification.classList.remove('show');
-                    }, 3000);
+                    showNotification('Prompt copiado para a área de transferência!');
                 } catch (err) {
                     console.error('Fallback: Erro ao copiar texto', err);
+                    showNotification('Erro ao copiar texto. Tente selecionar e copiar manualmente.');
                 }
                 document.body.removeChild(textArea);
             }
@@ -345,23 +662,23 @@
             function gerarPrompt(username, supplier, question, subject, testHours, planDays, company, app) {
                 return `PROMPT DE VENDAS - ${company.toUpperCase()}
 
-Dados do Vendedor:
-- Nome: ${username}
-- Fornecedor: ${supplier}
-- Aplicativo utilizado: ${app}
+DADOS DO VENDEDOR:
+• Nome: ${username}
+• Fornecedor: ${supplier}
+• Aplicativo utilizado: ${app}
 
-Contexto da Venda:
-O vendedor precisa saber: ${question}
-O assunto trata-se de: ${subject}
+CONTEXTO DA VENDA:
+• O vendedor precisa saber: ${question}
+• O assunto trata-se de: ${subject}
 
-Detalhes do Plano:
-- Período de teste: ${testHours} horas
-- Duração do plano: ${planDays} dias
+DETALHES DO PLANO:
+• Período de teste: ${testHours} horas
+• Duração do plano: ${planDays} dias
 
-Prompt para Geração de Resposta:
+PROMPT PARA GERAÇÃO DE RESPOSTA:
 "Como representante da ${company}, preciso de uma resposta eficaz para a seguinte situação:
 
-O cliente está interessado em ${subject} e quer saber especificamente sobre ${question}. 
+O cliente está interessado em ${subject} e quer saber especificamente sobre: ${question}
 
 Preciso de uma abordagem que:
 1. Seja persuasiva, mas não agressiva
@@ -373,10 +690,67 @@ Preciso de uma abordagem que:
 
 Por favor, forneça uma resposta que possa ser usada diretamente ou adaptada para essa situação específica."
 
-Observações Finais:
-- Manter tom profissional e amigável
-- Incluir chamada para ação clara
-- Personalizar com detalhes específicos quando necessário`;
+OBSERVAÇÕES FINAIS:
+• Manter tom profissional e amigável
+• Incluir chamada para ação clara
+• Personalizar com detalhes específicos quando necessário
+• Focar na solução que oferecemos para o problema do cliente
+
+EXEMPLO DE ESTRUTURA SUGERIDA:
+1. Saudação personalizada
+2. Reconhecimento da necessidade do cliente
+3. Apresentação da solução
+4. Destaque dos benefícios
+5. Informações sobre teste e plano
+6. Chamada para ação
+7. Encerramento cordial`;
+            }
+            
+            function addToHistory(username, supplier, subject, date) {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <strong>${subject}</strong>
+                    <div class="date">${date.toLocaleString('pt-BR')} - ${username}</div>
+                `;
+                
+                // Adicionar no início da lista
+                historyList.insertBefore(historyItem, historyList.firstChild);
+                
+                // Limitar a 5 itens no histórico
+                if (historyList.children.length > 5) {
+                    historyList.removeChild(historyList.lastChild);
+                }
+            }
+            
+            function loadTemplate(template) {
+                // Preencher formulário com base no template selecionado
+                switch(template) {
+                    case 'venda-produto':
+                        document.getElementById('question').value = "Quais são os benefícios do produto e como ele resolve minhas necessidades?";
+                        document.getElementById('subject').value = "Venda do produto X com foco em benefícios e solução de problemas";
+                        document.getElementById('testHours').value = "3";
+                        document.getElementById('planDays').value = "30";
+                        break;
+                    case 'agendamento-teste':
+                        document.getElementById('question').value = "Como agendar uma demonstração e quais são os próximos passos?";
+                        document.getElementById('subject').value = "Agendamento de demonstração do produto/serviço";
+                        document.getElementById('testHours').value = "2";
+                        document.getElementById('planDays').value = "14";
+                        break;
+                    case 'pos-venda':
+                        document.getElementById('question').value = "Quais suportes estão disponíveis após a compra e como acessá-los?";
+                        document.getElementById('subject').value = "Suporte pós-venda e garantia do produto";
+                        document.getElementById('testHours').value = "0";
+                        document.getElementById('planDays').value = "365";
+                        break;
+                }
+                
+                // Atualizar contadores
+                document.getElementById('question').dispatchEvent(new Event('input'));
+                document.getElementById('subject').dispatchEvent(new Event('input'));
+                
+                showNotification('Template carregado com sucesso! Preencha os demais campos e clique em Gerar Prompt.');
             }
         });
     </script>
