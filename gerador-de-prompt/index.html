@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gerador de Prompt de Vendas para Streaming">
+    <title>Gerador de Prompt de Vendas - Streaming</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cbc;
+            --accent-color: #ff6b6b;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .form-section, .result-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .form-section:hover, .result-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+        }
+
+        label i {
+            margin-right: 8px;
+            color: var(--primary-color);
+            width: 20px;
+            text-align: center;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e5eb;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: #fafbfc;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+            background-color: white;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-copy {
+            background: linear-gradient(to right, var(--success-color), #20c997);
+            margin-top: 20px;
+        }
+
+        .btn-copy:hover {
+            background: linear-gradient(to right, #218838, #1ea085);
+        }
+
+        .btn-reset {
+            background: linear-gradient(to right, #6c757d, #868e96);
+            margin-top: 15px;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(to right, #5a6268, #727b84);
+        }
+
+        .result-box {
+            background-color: #f8f9fa;
+            border: 2px dashed #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            min-height: 450px;
+            white-space: pre-line;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            transition: var(--transition);
+        }
+
+        .result-box:empty::before {
+            content: "Preencha o formulário ao lado para gerar seu prompt de vendas personalizado.";
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .company-logo {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .company-logo i {
+            margin-right: 5px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-robot"></i> Gerador de Prompt de Vendas</h1>
+            <p class="subtitle">Crie prompts eficientes para venda de serviços de streaming</p>
+        </header>
+
+        <div class="main-content">
+            <section class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-edit"></i>
+                    <h2>Informações do Prompt</h2>
+                </div>
+                <form id="promptForm">
+                    <div class="form-group">
+                        <label for="clientName">
+                            <i class="fas fa-user"></i>Nome Do Cliente:
+                        </label>
+                        <input type="text" id="clientName" name="clientName" placeholder="Digite o nome do cliente" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supplierName">
+                            <i class="fas fa-truck"></i>Nome do Fornecedor:
+                        </label>
+                        <input type="text" id="supplierName" name="supplierName" placeholder="Nome do fornecedor do serviço" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supplierQuestion">
+                            <i class="fas fa-question-circle"></i>O que o fornecedor quer saber do cliente:
+                        </label>
+                        <textarea id="supplierQuestion" name="supplierQuestion" placeholder="O que o fornecedor precisa saber sobre o cliente?" required></textarea>
+                        <div class="char-counter"><span id="supplier-counter">0</span>/300 caracteres</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientQuestion">
+                            <i class="fas fa-comments"></i>O que o cliente quer saber sobre o Serviço de Streaming:
+                        </label>
+                        <textarea id="clientQuestion" name="clientQuestion" placeholder="Quais são as dúvidas do cliente sobre o streaming?" required></textarea>
+                        <div class="char-counter"><span id="client-counter">0</span>/300 caracteres</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-clock"></i>Tempo:
+                        </label>
+                        <div class="time-inputs">
+                            <div>
+                                <label for="testTime" style="font-size: 0.9rem;">Tempo de teste (horas):</label>
+                                <input type="number" id="testTime" name="testTime" min="0" max="100" value="2" required>
+                            </div>
+                            <div>
+                                <label for="subscriptionTime" style="font-size: 0.9rem;">Tempo de assinatura (dias):</label>
+                                <input type="number" id="subscriptionTime" name="subscriptionTime" min="1" max="365" value="30" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="app">
+                            <i class="fas fa-mobile-alt"></i>App que o vendedor está usando:
+                        </label>
+                        <select id="app" name="app" required>
+                            <option value="">Selecione um app</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="Email">Email</option>
+                            <option value="Telegram">Telegram</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn pulse">
+                        <i class="fas fa-magic"></i>Gerar Prompt
+                    </button>
+                    <button type="button" id="resetBtn" class="btn btn-reset">
+                        <i class="fas fa-eraser"></i>Limpar Formulário
+                    </button>
+                </form>
+            </section>
+
+            <section class="result-section">
+                <div class="section-title">
+                    <i class="fas fa-file-alt"></i>
+                    <h2>Prompt Gerado</h2>
+                </div>
+                <div id="resultBox" class="result-box"></div>
+                <button id="copyBtn" class="btn btn-copy hidden">
+                    <i class="fas fa-copy"></i>Copiar Prompt
+                </button>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; <span id="currentYear"></span> <span class="company-logo"><i class="fas fa-tv"></i>Serviço de Streaming</span> - Gerador de Prompts de Vendas</p>
+            <div class="stats">
+                <span>Prompts gerados: <span id="promptsGenerated">0</span></span>
+                <span>Última geração: <span id="lastGeneration">Nunca</span></span>
+            </div>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Prompt copiado para a área de transferência!</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Definir ano atual no footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Elementos DOM
+            const form = document.getElementById('promptForm');
+            const resultBox = document.getElementById('resultBox');
+            const copyBtn = document.getElementById('copyBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const notification = document.getElementById('notification');
+            const supplierCounter = document.getElementById('supplier-counter');
+            const clientCounter = document.getElementById('client-counter');
+            const promptsGenerated = document.getElementById('promptsGenerated');
+            const lastGeneration = document.getElementById('lastGeneration');
+            
+            // Carregar dados salvos
+            let generatedCount = localStorage.getItem('promptsGenerated') || 0;
+            promptsGenerated.textContent = generatedCount;
+            
+            const lastGenDate = localStorage.getItem('lastGeneration');
+            if (lastGenDate) {
+                lastGeneration.textContent = new Date(lastGenDate).toLocaleString('pt-BR');
+            }
+            
+            // Contadores de caracteres
+            document.getElementById('supplierQuestion').addEventListener('input', function() {
+                supplierCounter.textContent = this.value.length;
+            });
+            
+            document.getElementById('clientQuestion').addEventListener('input', function() {
+                clientCounter.textContent = this.value.length;
+            });
+            
+            // Gerar prompt
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Obter valores do formulário
+                const clientName = document.getElementById('clientName').value;
+                const supplierName = document.getElementById('supplierName').value;
+                const supplierQuestion = document.getElementById('supplierQuestion').value;
+                const clientQuestion = document.getElementById('clientQuestion').value;
+                const testTime = document.getElementById('testTime').value;
+                const subscriptionTime = document.getElementById('subscriptionTime').value;
+                const app = document.getElementById('app').value;
+                
+                // Gerar o prompt
+                const prompt = gerarPrompt(clientName, supplierName, supplierQuestion, clientQuestion, testTime, subscriptionTime, app);
+                
+                // Exibir o prompt
+                resultBox.textContent = prompt;
+                
+                // Mostrar botão de copiar
+                copyBtn.classList.remove('hidden');
+                
+                // Atualizar estatísticas
+                generatedCount++;
+                promptsGenerated.textContent = generatedCount;
+                localStorage.setItem('promptsGenerated', generatedCount);
+                
+                const now = new Date();
+                lastGeneration.textContent = now.toLocaleString('pt-BR');
+                localStorage.setItem('lastGeneration', now.toISOString());
+            });
+            
+            // Copiar prompt
+            copyBtn.addEventListener('click', function() {
+                // Copiar o texto para a área de transferência
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(resultBox.textContent)
+                        .then(() => {
+                            // Mostrar notificação
+                            showNotification('Prompt copiado para a área de transferência!');
+                        })
+                        .catch(err => {
+                            console.error('Erro ao copiar texto: ', err);
+                            fallbackCopyTextToClipboard(resultBox.textContent);
+                        });
+                } else {
+                    fallbackCopyTextToClipboard(resultBox.textContent);
+                }
+            });
+            
+            // Resetar formulário
+            resetBtn.addEventListener('click', function() {
+                form.reset();
+                resultBox.textContent = '';
+                copyBtn.classList.add('hidden');
+                supplierCounter.textContent = '0';
+                clientCounter.textContent = '0';
+                document.getElementById('testTime').value = '2';
+                document.getElementById('subscriptionTime').value = '30';
+            });
+            
+            // Funções auxiliares
+            function showNotification(message) {
+                notification.querySelector('span').textContent = message;
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Fallback para navegadores mais antigos
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showNotification('Prompt copiado para a área de transferência!');
+                } catch (err) {
+                    console.error('Fallback: Erro ao copiar texto', err);
+                    showNotification('Erro ao copiar texto. Tente selecionar e copiar manualmente.');
+                }
+                document.body.removeChild(textArea);
+            }
+            
+            function gerarPrompt(clientName, supplierName, supplierQuestion, clientQuestion, testTime, subscriptionTime, app) {
+                return `PROMOT DE VENDAS - SERVIÇO DE STREAMING
+
+INFORMAÇÕES DO CLIENTE:
+• Nome do Cliente: ${clientName}
+• Fornecedor: ${supplierName}
+• App de comunicação: ${app}
+
+CONTEXTO DA CONVERSA:
+• O fornecedor quer saber: ${supplierQuestion}
+• O cliente quer saber sobre o streaming: ${clientQuestion}
+
+CONDIÇÕES DO SERVIÇO:
+• Tempo de teste: ${testTime} horas
+• Tempo de assinatura: ${subscriptionTime} dias
+
+PROMPT PARA RESPOSTA DO VENDEDOR:
+"Preciso de uma resposta para enviar ao cliente ${clientName} via ${app} que:
+
+1. Responda à pergunta do cliente sobre: ${clientQuestion}
+2. Obtenha as informações que preciso saber: ${supplierQuestion}
+3. Destaque os benefícios do nosso serviço de streaming
+4. Explique o período de teste de ${testTime} horas
+5. Apresente as vantagens da assinatura de ${subscriptionTime} dias
+6. Seja persuasiva mas natural para o ${app}
+
+A resposta deve ser:
+- Clara e direta
+- Com linguagem adequada para o ${app}
+- Com call-to-action para agendar demonstração
+- Com tom amigável e profissional
+
+Por favor, gere uma resposta completa que eu possa usar diretamente na conversa."`;
+            }
+        });
+    </script>
+</body>
+</html>
