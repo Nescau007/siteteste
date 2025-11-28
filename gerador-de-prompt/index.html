@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gerador de Prompt de Vendas para Streaming">
-    <title>Gerador de Prompt de Vendas - Streaming</title>
+    <meta name="description" content="Gerador Inteligente de Prompt de Vendas para Streaming">
+    <title>Gerador Inteligente de Prompt de Vendas - Streaming</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -15,6 +15,7 @@
             --dark-color: #343a40;
             --success-color: #28a745;
             --warning-color: #ffc107;
+            --info-color: #17a2b8;
             --border-radius: 10px;
             --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
@@ -35,7 +36,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -81,7 +82,7 @@
             gap: 30px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1100px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
@@ -209,6 +210,15 @@
             background: linear-gradient(to right, #5a6268, #727b84);
         }
 
+        .btn-secondary {
+            background: linear-gradient(to right, var(--info-color), #39c0ed);
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(to right, #138496, #2aa8d0);
+        }
+
         .result-box {
             background-color: #f8f9fa;
             border: 2px dashed #e9ecef;
@@ -308,13 +318,161 @@
         .pulse {
             animation: pulse 1.5s infinite;
         }
+
+        /* Novos estilos para as melhorias */
+        .analysis-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+
+        .analysis-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .analysis-title i {
+            margin-right: 8px;
+        }
+
+        .analysis-content {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .suggestion-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: var(--info-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        .quality-indicator {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .quality-bar {
+            flex-grow: 1;
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 0 10px;
+            overflow: hidden;
+        }
+
+        .quality-fill {
+            height: 100%;
+            background-color: var(--success-color);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .history-section {
+            margin-top: 30px;
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 10px;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .history-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .tone-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tone-option {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border: 2px solid #e1e5eb;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tone-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+
+        .improvement-tips {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #fff3cd;
+            border-left: 4px solid var(--warning-color);
+            border-radius: 4px;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tip-title i {
+            margin-right: 5px;
+            color: var(--warning-color);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-robot"></i> Gerador de Prompt de Vendas</h1>
-            <p class="subtitle">Crie prompts eficientes para venda de serviços de streaming</p>
+            <h1><i class="fas fa-robot"></i> Gerador Inteligente de Prompt de Vendas</h1>
+            <p class="subtitle">Crie prompts eficientes e personalizados para venda de serviços de streaming</p>
         </header>
 
         <div class="main-content">
@@ -385,13 +543,44 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-volume-up"></i>Tom da Mensagem:
+                        </label>
+                        <div class="tone-selector">
+                            <div class="tone-option" data-tone="formal">Formal</div>
+                            <div class="tone-option selected" data-tone="amigavel">Amigável</div>
+                            <div class="tone-option" data-tone="entusiasmado">Entusiasmado</div>
+                            <div class="tone-option" data-tone="profissional">Profissional</div>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn pulse">
-                        <i class="fas fa-magic"></i>Gerar Prompt
+                        <i class="fas fa-magic"></i>Gerar Prompt Inteligente
                     </button>
                     <button type="button" id="resetBtn" class="btn btn-reset">
                         <i class="fas fa-eraser"></i>Limpar Formulário
                     </button>
                 </form>
+
+                <div class="analysis-section">
+                    <div class="analysis-title">
+                        <i class="fas fa-chart-line"></i>Análise do Conteúdo
+                    </div>
+                    <div id="contentAnalysis" class="analysis-content">
+                        Preencha os campos acima para ver a análise do conteúdo.
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <div class="section-title">
+                        <i class="fas fa-history"></i>
+                        <h3>Histórico de Prompts</h3>
+                    </div>
+                    <div id="historyList" class="history-list">
+                        <!-- Histórico será preenchido via JavaScript -->
+                    </div>
+                </div>
             </section>
 
             <section class="result-section">
@@ -399,15 +588,37 @@
                     <i class="fas fa-file-alt"></i>
                     <h2>Prompt Gerado</h2>
                 </div>
+                
+                <div class="analysis-section">
+                    <div class="analysis-title">
+                        <i class="fas fa-lightbulb"></i>Sugestões Inteligentes
+                    </div>
+                    <div id="suggestions" class="analysis-content">
+                        O prompt gerado aparecerá aqui com sugestões de melhoria.
+                    </div>
+                </div>
+                
                 <div id="resultBox" class="result-box"></div>
+                
+                <div class="quality-indicator">
+                    <span>Qualidade do prompt:</span>
+                    <div class="quality-bar">
+                        <div id="qualityFill" class="quality-fill" style="width: 0%"></div>
+                    </div>
+                    <span id="qualityPercent">0%</span>
+                </div>
+                
                 <button id="copyBtn" class="btn btn-copy hidden">
                     <i class="fas fa-copy"></i>Copiar Prompt
+                </button>
+                <button id="improveBtn" class="btn btn-secondary hidden">
+                    <i class="fas fa-wand-magic-sparkles"></i>Melhorar Prompt
                 </button>
             </section>
         </div>
 
         <footer>
-            <p>&copy; <span id="currentYear"></span> <span class="company-logo"><i class="fas fa-tv"></i>Serviço de Streaming</span> - Gerador de Prompts de Vendas</p>
+            <p>&copy; <span id="currentYear"></span> <span class="company-logo"><i class="fas fa-tv"></i>Serviço de Streaming</span> - Gerador Inteligente de Prompts de Vendas</p>
             <div class="stats">
                 <span>Prompts gerados: <span id="promptsGenerated">0</span></span>
                 <span>Última geração: <span id="lastGeneration">Nunca</span></span>
@@ -430,11 +641,22 @@
             const resultBox = document.getElementById('resultBox');
             const copyBtn = document.getElementById('copyBtn');
             const resetBtn = document.getElementById('resetBtn');
+            const improveBtn = document.getElementById('improveBtn');
             const notification = document.getElementById('notification');
             const supplierCounter = document.getElementById('supplier-counter');
             const clientCounter = document.getElementById('client-counter');
             const promptsGenerated = document.getElementById('promptsGenerated');
             const lastGeneration = document.getElementById('lastGeneration');
+            const contentAnalysis = document.getElementById('contentAnalysis');
+            const suggestions = document.getElementById('suggestions');
+            const qualityFill = document.getElementById('qualityFill');
+            const qualityPercent = document.getElementById('qualityPercent');
+            const historyList = document.getElementById('historyList');
+            const toneOptions = document.querySelectorAll('.tone-option');
+            
+            // Variáveis globais
+            let currentTone = 'amigavel';
+            let promptHistory = [];
             
             // Carregar dados salvos
             let generatedCount = localStorage.getItem('promptsGenerated') || 0;
@@ -445,14 +667,222 @@
                 lastGeneration.textContent = new Date(lastGenDate).toLocaleString('pt-BR');
             }
             
+            // Carregar histórico
+            const savedHistory = localStorage.getItem('promptHistory');
+            if (savedHistory) {
+                promptHistory = JSON.parse(savedHistory);
+                renderHistory();
+            }
+            
+            // Configurar seleção de tom
+            toneOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    toneOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    currentTone = this.getAttribute('data-tone');
+                });
+            });
+            
             // Contadores de caracteres
             document.getElementById('supplierQuestion').addEventListener('input', function() {
                 supplierCounter.textContent = this.value.length;
+                analyzeContent();
             });
             
             document.getElementById('clientQuestion').addEventListener('input', function() {
                 clientCounter.textContent = this.value.length;
+                analyzeContent();
             });
+            
+            // Analisar conteúdo em tempo real
+            function analyzeContent() {
+                const supplierQuestion = document.getElementById('supplierQuestion').value;
+                const clientQuestion = document.getElementById('clientQuestion').value;
+                
+                let analysisHTML = '';
+                
+                if (supplierQuestion || clientQuestion) {
+                    analysisHTML = '<div class="analysis-title"><i class="fas fa-search"></i>Análise Detectada:</div>';
+                    
+                    // Análise da pergunta do fornecedor
+                    if (supplierQuestion) {
+                        const supplierAnalysis = analyzeSupplierQuestion(supplierQuestion);
+                        analysisHTML += `<p><strong>Pergunta do Fornecedor:</strong> ${supplierAnalysis}</p>`;
+                    }
+                    
+                    // Análise da pergunta do cliente
+                    if (clientQuestion) {
+                        const clientAnalysis = analyzeClientQuestion(clientQuestion);
+                        analysisHTML += `<p><strong>Pergunta do Cliente:</strong> ${clientAnalysis}</p>`;
+                    }
+                    
+                    // Tags de sugestão
+                    analysisHTML += '<div class="suggestion-tags" id="suggestionTags"></div>';
+                } else {
+                    analysisHTML = 'Preencha os campos acima para ver a análise do conteúdo.';
+                }
+                
+                contentAnalysis.innerHTML = analysisHTML;
+                
+                // Adicionar tags de sugestão se houver conteúdo
+                if (supplierQuestion || clientQuestion) {
+                    addSuggestionTags(supplierQuestion, clientQuestion);
+                }
+            }
+            
+            // Analisar pergunta do fornecedor
+            function analyzeSupplierQuestion(question) {
+                let analysis = '';
+                const lowerQuestion = question.toLowerCase();
+                
+                if (lowerQuestion.includes('preço') || lowerQuestion.includes('custo') || lowerQuestion.includes('valor')) {
+                    analysis += 'Foco em informações de custo. ';
+                }
+                
+                if (lowerQuestion.includes('disponibilidade') || lowerQuestion.includes('quando') || lowerQuestion.includes('tempo')) {
+                    analysis += 'Interesse em prazos e disponibilidade. ';
+                }
+                
+                if (lowerQuestion.includes('como funciona') || lowerQuestion.includes('funcionamento') || lowerQuestion.includes('processo')) {
+                    analysis += 'Busca por detalhes operacionais. ';
+                }
+                
+                if (lowerQuestion.includes('benefício') || lowerQuestion.includes('vantagem') || lowerQuestion.includes('vantagens')) {
+                    analysis += 'Interesse nos benefícios do serviço. ';
+                }
+                
+                if (analysis === '') {
+                    analysis = 'Pergunta geral sobre o serviço.';
+                }
+                
+                return analysis;
+            }
+            
+            // Analisar pergunta do cliente
+            function analyzeClientQuestion(question) {
+                let analysis = '';
+                const lowerQuestion = question.toLowerCase();
+                
+                if (lowerQuestion.includes('preço') || lowerQuestion.includes('custo') || lowerQuestion.includes('valor')) {
+                    analysis += 'Preocupação com custos. ';
+                }
+                
+                if (lowerQuestion.includes('qualidade') || lowerQuestion.includes('resolução') || lowerQuestion.includes('definição')) {
+                    analysis += 'Interesse na qualidade do streaming. ';
+                }
+                
+                if (lowerQuestion.includes('conteúdo') || lowerQuestion.includes('filme') || lowerQuestion.includes('série')) {
+                    analysis += 'Foco no catálogo de conteúdo. ';
+                }
+                
+                if (lowerQuestion.includes('dispositivo') || lowerQuestion.includes('celular') || lowerQuestion.includes('tv') || lowerQuestion.includes('computador')) {
+                    analysis += 'Interesse em compatibilidade com dispositivos. ';
+                }
+                
+                if (lowerQuestion.includes('contrato') || lowerQuestion.includes('fidelidade') || lowerQuestion.includes('cancelamento')) {
+                    analysis += 'Preocupação com compromissos de longo prazo. ';
+                }
+                
+                if (analysis === '') {
+                    analysis = 'Dúvida geral sobre o serviço.';
+                }
+                
+                return analysis;
+            }
+            
+            // Adicionar tags de sugestão
+            function addSuggestionTags(supplierQuestion, clientQuestion) {
+                const tagsContainer = document.getElementById('suggestionTags');
+                tagsContainer.innerHTML = '';
+                
+                const allText = (supplierQuestion + ' ' + clientQuestion).toLowerCase();
+                const tags = [];
+                
+                // Detectar tópicos e adicionar tags correspondentes
+                if (allText.includes('preço') || allText.includes('custo') || allText.includes('valor')) {
+                    tags.push('Valor');
+                }
+                
+                if (allText.includes('qualidade') || allText.includes('resolução') || allText.includes('definição')) {
+                    tags.push('Qualidade');
+                }
+                
+                if (allText.includes('conteúdo') || allText.includes('filme') || allText.includes('série')) {
+                    tags.push('Catálogo');
+                }
+                
+                if (allText.includes('dispositivo') || allText.includes('celular') || allText.includes('tv')) {
+                    tags.push('Dispositivos');
+                }
+                
+                if (allText.includes('teste') || allText.includes('grátis') || allText.includes('experimentar')) {
+                    tags.push('Teste Grátis');
+                }
+                
+                if (allText.includes('suporte') || allText.includes('atendimento') || allText.includes('ajuda')) {
+                    tags.push('Suporte');
+                }
+                
+                if (allText.includes('contrato') || allText.includes('fidelidade') || allText.includes('cancelamento')) {
+                    tags.push('Flexibilidade');
+                }
+                
+                // Adicionar tags ao container
+                tags.forEach(tag => {
+                    const tagElement = document.createElement('div');
+                    tagElement.className = 'tag';
+                    tagElement.textContent = tag;
+                    tagElement.addEventListener('click', function() {
+                        // Adicionar conteúdo relacionado à tag quando clicada
+                        addTagContent(tag);
+                    });
+                    tagsContainer.appendChild(tagElement);
+                });
+            }
+            
+            // Adicionar conteúdo relacionado à tag
+            function addTagContent(tag) {
+                const supplierQuestion = document.getElementById('supplierQuestion');
+                const clientQuestion = document.getElementById('clientQuestion');
+                
+                let contentToAdd = '';
+                
+                switch(tag) {
+                    case 'Valor':
+                        contentToAdd = 'Informações sobre preços e opções de pagamento.';
+                        break;
+                    case 'Qualidade':
+                        contentToAdd = 'Detalhes sobre a qualidade de streaming oferecida.';
+                        break;
+                    case 'Catálogo':
+                        contentToAdd = 'Informações sobre o conteúdo disponível.';
+                        break;
+                    case 'Dispositivos':
+                        contentToAdd = 'Lista de dispositivos compatíveis com o serviço.';
+                        break;
+                    case 'Teste Grátis':
+                        contentToAdd = 'Detalhes sobre o período de teste gratuito.';
+                        break;
+                    case 'Suporte':
+                        contentToAdd = 'Informações sobre suporte ao cliente.';
+                        break;
+                    case 'Flexibilidade':
+                        contentToAdd = 'Detalhes sobre flexibilidade de contrato e cancelamento.';
+                        break;
+                }
+                
+                // Adicionar ao campo mais apropriado
+                if (supplierQuestion.value.length < clientQuestion.value.length) {
+                    supplierQuestion.value += (supplierQuestion.value ? ' ' : '') + contentToAdd;
+                } else {
+                    clientQuestion.value += (clientQuestion.value ? ' ' : '') + contentToAdd;
+                }
+                
+                // Atualizar contadores e análise
+                supplierCounter.textContent = supplierQuestion.value.length;
+                clientCounter.textContent = clientQuestion.value.length;
+                analyzeContent();
+            }
             
             // Gerar prompt
             form.addEventListener('submit', function(e) {
@@ -468,13 +898,14 @@
                 const app = document.getElementById('app').value;
                 
                 // Gerar o prompt
-                const prompt = gerarPrompt(clientName, supplierName, supplierQuestion, clientQuestion, testTime, subscriptionTime, app);
+                const prompt = gerarPrompt(clientName, supplierName, supplierQuestion, clientQuestion, testTime, subscriptionTime, app, currentTone);
                 
                 // Exibir o prompt
                 resultBox.textContent = prompt;
                 
-                // Mostrar botão de copiar
+                // Mostrar botões
                 copyBtn.classList.remove('hidden');
+                improveBtn.classList.remove('hidden');
                 
                 // Atualizar estatísticas
                 generatedCount++;
@@ -484,6 +915,24 @@
                 const now = new Date();
                 lastGeneration.textContent = now.toLocaleString('pt-BR');
                 localStorage.setItem('lastGeneration', now.toISOString());
+                
+                // Calcular e exibir qualidade do prompt
+                const quality = calculatePromptQuality(supplierQuestion, clientQuestion);
+                qualityFill.style.width = `${quality}%`;
+                qualityPercent.textContent = `${quality}%`;
+                
+                // Gerar sugestões
+                generateSuggestions(supplierQuestion, clientQuestion);
+                
+                // Adicionar ao histórico
+                addToHistory({
+                    clientName,
+                    supplierName,
+                    supplierQuestion,
+                    clientQuestion,
+                    prompt,
+                    date: now
+                });
             });
             
             // Copiar prompt
@@ -504,15 +953,42 @@
                 }
             });
             
+            // Melhorar prompt
+            improveBtn.addEventListener('click', function() {
+                const currentPrompt = resultBox.textContent;
+                const improvedPrompt = improvePrompt(currentPrompt);
+                resultBox.textContent = improvedPrompt;
+                
+                // Mostrar notificação
+                showNotification('Prompt melhorado com sucesso!');
+                
+                // Recalcular qualidade
+                const supplierQuestion = document.getElementById('supplierQuestion').value;
+                const clientQuestion = document.getElementById('clientQuestion').value;
+                const quality = calculatePromptQuality(supplierQuestion, clientQuestion, true);
+                qualityFill.style.width = `${quality}%`;
+                qualityPercent.textContent = `${quality}%`;
+            });
+            
             // Resetar formulário
             resetBtn.addEventListener('click', function() {
                 form.reset();
                 resultBox.textContent = '';
                 copyBtn.classList.add('hidden');
+                improveBtn.classList.add('hidden');
                 supplierCounter.textContent = '0';
                 clientCounter.textContent = '0';
                 document.getElementById('testTime').value = '2';
                 document.getElementById('subscriptionTime').value = '30';
+                contentAnalysis.innerHTML = 'Preencha os campos acima para ver a análise do conteúdo.';
+                suggestions.innerHTML = 'O prompt gerado aparecerá aqui com sugestões de melhoria.';
+                qualityFill.style.width = '0%';
+                qualityPercent.textContent = '0%';
+                
+                // Resetar tom para amigável
+                toneOptions.forEach(opt => opt.classList.remove('selected'));
+                document.querySelector('.tone-option[data-tone="amigavel"]').classList.add('selected');
+                currentTone = 'amigavel';
             });
             
             // Funções auxiliares
@@ -541,7 +1017,24 @@
                 document.body.removeChild(textArea);
             }
             
-            function gerarPrompt(clientName, supplierName, supplierQuestion, clientQuestion, testTime, subscriptionTime, app) {
+            function gerarPrompt(clientName, supplierName, supplierQuestion, clientQuestion, testTime, subscriptionTime, app, tone) {
+                // Mapear tom para instruções específicas
+                let toneInstruction = '';
+                switch(tone) {
+                    case 'formal':
+                        toneInstruction = 'Use linguagem formal e respeitosa, evitando gírias.';
+                        break;
+                    case 'amigavel':
+                        toneInstruction = 'Use linguagem amigável e acessível, como em uma conversa entre amigos.';
+                        break;
+                    case 'entusiasmado':
+                        toneInstruction = 'Use linguagem energética e entusiástica, destacando os benefícios com emoção.';
+                        break;
+                    case 'profissional':
+                        toneInstruction = 'Use linguagem profissional e técnica, focando em fatos e dados concretos.';
+                        break;
+                }
+                
                 return `PROMOT DE VENDAS - SERVIÇO DE STREAMING
 
 INFORMAÇÕES DO CLIENTE:
@@ -565,7 +1058,7 @@ PROMPT PARA RESPOSTA DO VENDEDOR:
 3. Destaque os benefícios do nosso serviço de streaming
 4. Explique o período de teste de ${testTime} horas
 5. Apresente as vantagens da assinatura de ${subscriptionTime} dias
-6. Seja persuasiva mas natural para o ${app}
+6. ${toneInstruction}
 
 A resposta deve ser:
 - Clara e direta
@@ -574,6 +1067,141 @@ A resposta deve ser:
 - Com tom amigável e profissional
 
 Por favor, gere uma resposta completa que eu possa usar diretamente na conversa."`;
+            }
+            
+            // Calcular qualidade do prompt
+            function calculatePromptQuality(supplierQuestion, clientQuestion, improved = false) {
+                let quality = 50; // Qualidade base
+                
+                // Fatores que aumentam a qualidade
+                if (supplierQuestion.length > 50) quality += 10;
+                if (clientQuestion.length > 50) quality += 10;
+                if (supplierQuestion.includes('?') || clientQuestion.includes('?')) quality += 5;
+                
+                // Bônus por termos específicos
+                const positiveTerms = ['benefício', 'vantagem', 'como funciona', 'qualidade', 'conteúdo'];
+                positiveTerms.forEach(term => {
+                    if (supplierQuestion.toLowerCase().includes(term) || clientQuestion.toLowerCase().includes(term)) {
+                        quality += 5;
+                    }
+                });
+                
+                // Bônus se for uma versão melhorada
+                if (improved) quality += 10;
+                
+                // Limitar a 100%
+                return Math.min(quality, 100);
+            }
+            
+            // Gerar sugestões
+            function generateSuggestions(supplierQuestion, clientQuestion) {
+                let suggestionsHTML = '';
+                const allText = (supplierQuestion + ' ' + clientQuestion).toLowerCase();
+                
+                suggestionsHTML += '<div class="tip-title"><i class="fas fa-lightbulb"></i>Dicas para melhorar seu prompt:</div>';
+                
+                // Verificar se há perguntas específicas
+                if (!allText.includes('?')) {
+                    suggestionsHTML += '<div class="improvement-tips"><strong>Sugestão:</strong> Tente formular perguntas mais específicas usando "?" para obter respostas mais diretas.</div>';
+                }
+                
+                // Verificar se há menção a benefícios
+                if (!allText.includes('benefício') && !allText.includes('vantagem')) {
+                    suggestionsHTML += '<div class="improvement-tips"><strong>Sugestão:</strong> Inclua perguntas sobre benefícios específicos para destacar o valor do serviço.</div>';
+                }
+                
+                // Verificar se há menção a custos
+                if (allText.includes('preço') || allText.includes('custo')) {
+                    suggestionsHTML += '<div class="improvement-tips"><strong>Sugestão:</strong> Destaque não apenas o preço, mas também o valor e o retorno sobre o investimento.</div>';
+                }
+                
+                // Verificar se há menção a conteúdo
+                if (allText.includes('conteúdo') || allText.includes('filme') || allText.includes('série')) {
+                    suggestionsHTML += '<div class="improvement-tips"><strong>Sugestão:</strong> Mencione títulos populares ou exclusivos disponíveis no catálogo.</div>';
+                }
+                
+                // Verificar se há menção a qualidade
+                if (allText.includes('qualidade') || allText.includes('resolução')) {
+                    suggestionsHTML += '<div class="improvement-tips"><strong>Sugestão:</strong> Destaque a tecnologia utilizada para garantir a melhor experiência de streaming.</div>';
+                }
+                
+                // Se não houver sugestões específicas
+                if (suggestionsHTML === '<div class="tip-title"><i class="fas fa-lightbulb"></i>Dicas para melhorar seu prompt:</div>') {
+                    suggestionsHTML += '<p>Seu prompt está bem estruturado. Considere adicionar mais detalhes específicos para obter respostas mais diretas.</p>';
+                }
+                
+                suggestions.innerHTML = suggestionsHTML;
+            }
+            
+            // Melhorar prompt existente
+            function improvePrompt(prompt) {
+                // Adicionar instruções mais específicas
+                let improvedPrompt = prompt;
+                
+                // Verificar se o prompt menciona call-to-action
+                if (!improvedPrompt.includes('call-to-action')) {
+                    improvedPrompt += '\n\nINSTRUÇÕES ADICIONAIS:\n- Inclua um call-to-action claro (ex: "Vamos agendar uma demonstração?")\n- Destaque um benefício exclusivo do serviço\n- Use perguntas abertas para engajar o cliente';
+                }
+                
+                return improvedPrompt;
+            }
+            
+            // Adicionar ao histórico
+            function addToHistory(entry) {
+                promptHistory.unshift(entry);
+                
+                // Manter apenas os 5 mais recentes
+                if (promptHistory.length > 5) {
+                    promptHistory = promptHistory.slice(0, 5);
+                }
+                
+                // Salvar no localStorage
+                localStorage.setItem('promptHistory', JSON.stringify(promptHistory));
+                
+                // Atualizar a exibição
+                renderHistory();
+            }
+            
+            // Renderizar histórico
+            function renderHistory() {
+                historyList.innerHTML = '';
+                
+                if (promptHistory.length === 0) {
+                    historyList.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 20px;">Nenhum prompt no histórico</p>';
+                    return;
+                }
+                
+                promptHistory.forEach((entry, index) => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div><strong>${entry.clientName}</strong> - ${entry.supplierName}</div>
+                        <div class="history-date">${new Date(entry.date).toLocaleString('pt-BR')}</div>
+                    `;
+                    
+                    historyItem.addEventListener('click', function() {
+                        // Preencher o formulário com os dados do histórico
+                        document.getElementById('clientName').value = entry.clientName;
+                        document.getElementById('supplierName').value = entry.supplierName;
+                        document.getElementById('supplierQuestion').value = entry.supplierQuestion;
+                        document.getElementById('clientQuestion').value = entry.clientQuestion;
+                        document.getElementById('supplier-counter').textContent = entry.supplierQuestion.length;
+                        document.getElementById('client-counter').textContent = entry.clientQuestion.length;
+                        
+                        // Exibir o prompt
+                        resultBox.textContent = entry.prompt;
+                        copyBtn.classList.remove('hidden');
+                        improveBtn.classList.remove('hidden');
+                        
+                        // Atualizar análise
+                        analyzeContent();
+                        
+                        // Mostrar notificação
+                        showNotification('Dados do histórico carregados!');
+                    });
+                    
+                    historyList.appendChild(historyItem);
+                });
             }
         });
     </script>
