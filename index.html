@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gerador de Prompt de Vendas para a NewTvs">
     <title>Gerador de Prompt de Vendas - NewTvs</title>
     <style>
         :root {
@@ -46,12 +47,12 @@
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 10px;
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             opacity: 0.9;
         }
 
@@ -64,6 +65,10 @@
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
             }
         }
 
@@ -116,6 +121,7 @@
             border-radius: var(--border-radius);
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
         }
 
         .btn:hover {
@@ -299,18 +305,42 @@
             
             copyBtn.addEventListener('click', function() {
                 // Copiar o texto para a área de transferência
-                navigator.clipboard.writeText(resultBox.textContent)
-                    .then(() => {
-                        // Mostrar notificação
-                        notification.classList.add('show');
-                        setTimeout(() => {
-                            notification.classList.remove('show');
-                        }, 3000);
-                    })
-                    .catch(err => {
-                        console.error('Erro ao copiar texto: ', err);
-                    });
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(resultBox.textContent)
+                        .then(() => {
+                            // Mostrar notificação
+                            notification.classList.add('show');
+                            setTimeout(() => {
+                                notification.classList.remove('show');
+                            }, 3000);
+                        })
+                        .catch(err => {
+                            console.error('Erro ao copiar texto: ', err);
+                            fallbackCopyTextToClipboard(resultBox.textContent);
+                        });
+                } else {
+                    fallbackCopyTextToClipboard(resultBox.textContent);
+                }
             });
+            
+            // Fallback para navegadores mais antigos
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    notification.classList.add('show');
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 3000);
+                } catch (err) {
+                    console.error('Fallback: Erro ao copiar texto', err);
+                }
+                document.body.removeChild(textArea);
+            }
             
             function gerarPrompt(username, supplier, question, subject, testHours, planDays, company, app) {
                 return `PROMPT DE VENDAS - ${company.toUpperCase()}
