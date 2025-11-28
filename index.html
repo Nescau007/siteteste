@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gerador de Prompt de Vendas para a NewTvs">
-    <title>Gerador de Prompt de Vendas - NewTvs</title>
+    <meta name="description" content="Gerador de Prompt de Vendas para Streaming">
+    <title>Gerador de Prompt de Vendas - Streaming</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -157,20 +157,8 @@
         }
 
         textarea {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .input-with-icon i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
         }
 
         .btn {
@@ -276,35 +264,10 @@
             margin-top: 5px;
         }
 
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            margin-left: 5px;
-            color: var(--primary-color);
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: var(--dark-color);
-            color: white;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.8rem;
-            font-weight: normal;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         footer {
@@ -336,45 +299,6 @@
             color: #6c757d;
         }
 
-        .prompt-preview {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-        }
-
-        .prompt-preview h3 {
-            margin-bottom: 15px;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-        }
-
-        .prompt-preview h3 i {
-            margin-right: 10px;
-        }
-
-        .history-item {
-            background: #f8f9fa;
-            border-left: 4px solid var(--primary-color);
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .history-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-
-        .history-item .date {
-            font-size: 0.8rem;
-            color: #6c757d;
-        }
-
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -390,7 +314,7 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-robot"></i> Gerador de Prompt de Vendas</h1>
-            <p class="subtitle">Crie prompts eficientes para suas estratégias de vendas</p>
+            <p class="subtitle">Crie prompts eficientes para venda de serviços de streaming</p>
         </header>
 
         <div class="main-content">
@@ -401,74 +325,62 @@
                 </div>
                 <form id="promptForm">
                     <div class="form-group">
-                        <label for="username">
-                            <i class="fas fa-user"></i>Nome de usuário:
+                        <label for="clientName">
+                            <i class="fas fa-user"></i>Nome Do Cliente:
                         </label>
-                        <input type="text" id="username" name="username" placeholder="Digite seu nome" required>
+                        <input type="text" id="clientName" name="clientName" placeholder="Digite o nome do cliente" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="supplier">
-                            <i class="fas fa-truck"></i>Nome do fornecedor:
-                            <div class="tooltip">
-                                <i class="fas fa-question-circle"></i>
-                                <span class="tooltiptext">Nome da empresa ou pessoa que fornece o produto/serviço</span>
+                        <label for="supplierName">
+                            <i class="fas fa-truck"></i>Nome do Fornecedor:
+                        </label>
+                        <input type="text" id="supplierName" name="supplierName" placeholder="Nome do fornecedor do serviço" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supplierQuestion">
+                            <i class="fas fa-question-circle"></i>O que o fornecedor quer saber do cliente:
+                        </label>
+                        <textarea id="supplierQuestion" name="supplierQuestion" placeholder="O que o fornecedor precisa saber sobre o cliente?" required></textarea>
+                        <div class="char-counter"><span id="supplier-counter">0</span>/300 caracteres</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clientQuestion">
+                            <i class="fas fa-comments"></i>O que o cliente quer saber sobre o Serviço de Streaming:
+                        </label>
+                        <textarea id="clientQuestion" name="clientQuestion" placeholder="Quais são as dúvidas do cliente sobre o streaming?" required></textarea>
+                        <div class="char-counter"><span id="client-counter">0</span>/300 caracteres</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-clock"></i>Tempo:
+                        </label>
+                        <div class="time-inputs">
+                            <div>
+                                <label for="testTime" style="font-size: 0.9rem;">Tempo de teste (horas):</label>
+                                <input type="number" id="testTime" name="testTime" min="0" max="100" value="2" required>
                             </div>
-                        </label>
-                        <input type="text" id="supplier" name="supplier" placeholder="Nome do fornecedor" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="question">
-                            <i class="fas fa-question-circle"></i>O que o vendedor quer saber:
-                        </label>
-                        <textarea id="question" name="question" placeholder="Descreva o que o vendedor precisa saber" required></textarea>
-                        <div class="char-counter"><span id="question-counter">0</span>/500 caracteres</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="subject">
-                            <i class="fas fa-comment-alt"></i>O que se trata:
-                        </label>
-                        <textarea id="subject" name="subject" placeholder="Descreva o assunto principal" required></textarea>
-                        <div class="char-counter"><span id="subject-counter">0</span>/300 caracteres</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="testHours">
-                            <i class="fas fa-clock"></i>Quantas horas de teste:
-                        </label>
-                        <input type="number" id="testHours" name="testHours" min="0" max="100" value="2" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="planDays">
-                            <i class="fas fa-calendar-alt"></i>Quantos dias tem o plano:
-                        </label>
-                        <input type="number" id="planDays" name="planDays" min="1" max="365" value="30" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="company">
-                            <i class="fas fa-building"></i>Nome da Empresa:
-                        </label>
-                        <div class="input-with-icon">
-                            <input type="text" id="company" name="company" value="NewTvs" readonly>
-                            <i class="fas fa-lock"></i>
+                            <div>
+                                <label for="subscriptionTime" style="font-size: 0.9rem;">Tempo de assinatura (dias):</label>
+                                <input type="number" id="subscriptionTime" name="subscriptionTime" min="1" max="365" value="30" required>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="app">
-                            <i class="fas fa-mobile-alt"></i>Qual App está usando?
+                            <i class="fas fa-mobile-alt"></i>App que o vendedor está usando:
                         </label>
                         <select id="app" name="app" required>
                             <option value="">Selecione um app</option>
                             <option value="WhatsApp">WhatsApp</option>
-                            <option value="Telegram">Telegram</option>
+                            <option value="Facebook">Facebook</option>
                             <option value="Instagram">Instagram</option>
-                            <option value="Facebook Messenger">Facebook Messenger</option>
                             <option value="Email">Email</option>
+                            <option value="Telegram">Telegram</option>
                             <option value="Outro">Outro</option>
                         </select>
                     </div>
@@ -491,29 +403,11 @@
                 <button id="copyBtn" class="btn btn-copy hidden">
                     <i class="fas fa-copy"></i>Copiar Prompt
                 </button>
-                
-                <div class="prompt-preview">
-                    <h3><i class="fas fa-history"></i>Histórico Rápido</h3>
-                    <div id="historyList">
-                        <div class="history-item" data-template="venda-produto">
-                            <strong>Venda de Produto</strong>
-                            <div class="date">Template pré-definido</div>
-                        </div>
-                        <div class="history-item" data-template="agendamento-teste">
-                            <strong>Agendamento de Teste</strong>
-                            <div class="date">Template pré-definido</div>
-                        </div>
-                        <div class="history-item" data-template="pos-venda">
-                            <strong>Pós-Venda</strong>
-                            <div class="date">Template pré-definido</div>
-                        </div>
-                    </div>
-                </div>
             </section>
         </div>
 
         <footer>
-            <p>&copy; <span id="currentYear"></span> <span class="company-logo"><i class="fas fa-tv"></i>NewTvs</span> - Todos os direitos reservados</p>
+            <p>&copy; <span id="currentYear"></span> <span class="company-logo"><i class="fas fa-tv"></i>Serviço de Streaming</span> - Gerador de Prompts de Vendas</p>
             <div class="stats">
                 <span>Prompts gerados: <span id="promptsGenerated">0</span></span>
                 <span>Última geração: <span id="lastGeneration">Nunca</span></span>
@@ -537,11 +431,10 @@
             const copyBtn = document.getElementById('copyBtn');
             const resetBtn = document.getElementById('resetBtn');
             const notification = document.getElementById('notification');
-            const questionCounter = document.getElementById('question-counter');
-            const subjectCounter = document.getElementById('subject-counter');
+            const supplierCounter = document.getElementById('supplier-counter');
+            const clientCounter = document.getElementById('client-counter');
             const promptsGenerated = document.getElementById('promptsGenerated');
             const lastGeneration = document.getElementById('lastGeneration');
-            const historyList = document.getElementById('historyList');
             
             // Carregar dados salvos
             let generatedCount = localStorage.getItem('promptsGenerated') || 0;
@@ -553,12 +446,12 @@
             }
             
             // Contadores de caracteres
-            document.getElementById('question').addEventListener('input', function() {
-                questionCounter.textContent = this.value.length;
+            document.getElementById('supplierQuestion').addEventListener('input', function() {
+                supplierCounter.textContent = this.value.length;
             });
             
-            document.getElementById('subject').addEventListener('input', function() {
-                subjectCounter.textContent = this.value.length;
+            document.getElementById('clientQuestion').addEventListener('input', function() {
+                clientCounter.textContent = this.value.length;
             });
             
             // Gerar prompt
@@ -566,17 +459,16 @@
                 e.preventDefault();
                 
                 // Obter valores do formulário
-                const username = document.getElementById('username').value;
-                const supplier = document.getElementById('supplier').value;
-                const question = document.getElementById('question').value;
-                const subject = document.getElementById('subject').value;
-                const testHours = document.getElementById('testHours').value;
-                const planDays = document.getElementById('planDays').value;
-                const company = document.getElementById('company').value;
+                const clientName = document.getElementById('clientName').value;
+                const supplierName = document.getElementById('supplierName').value;
+                const supplierQuestion = document.getElementById('supplierQuestion').value;
+                const clientQuestion = document.getElementById('clientQuestion').value;
+                const testTime = document.getElementById('testTime').value;
+                const subscriptionTime = document.getElementById('subscriptionTime').value;
                 const app = document.getElementById('app').value;
                 
                 // Gerar o prompt
-                const prompt = gerarPrompt(username, supplier, question, subject, testHours, planDays, company, app);
+                const prompt = gerarPrompt(clientName, supplierName, supplierQuestion, clientQuestion, testTime, subscriptionTime, app);
                 
                 // Exibir o prompt
                 resultBox.textContent = prompt;
@@ -592,9 +484,6 @@
                 const now = new Date();
                 lastGeneration.textContent = now.toLocaleString('pt-BR');
                 localStorage.setItem('lastGeneration', now.toISOString());
-                
-                // Adicionar ao histórico
-                addToHistory(username, supplier, subject, now);
             });
             
             // Copiar prompt
@@ -620,17 +509,10 @@
                 form.reset();
                 resultBox.textContent = '';
                 copyBtn.classList.add('hidden');
-                questionCounter.textContent = '0';
-                subjectCounter.textContent = '0';
-            });
-            
-            // Templates de histórico
-            historyList.addEventListener('click', function(e) {
-                const historyItem = e.target.closest('.history-item');
-                if (historyItem) {
-                    const template = historyItem.dataset.template;
-                    loadTemplate(template);
-                }
+                supplierCounter.textContent = '0';
+                clientCounter.textContent = '0';
+                document.getElementById('testTime').value = '2';
+                document.getElementById('subscriptionTime').value = '30';
             });
             
             // Funções auxiliares
@@ -659,98 +541,39 @@
                 document.body.removeChild(textArea);
             }
             
-            function gerarPrompt(username, supplier, question, subject, testHours, planDays, company, app) {
-                return `PROMPT DE VENDAS - ${company.toUpperCase()}
+            function gerarPrompt(clientName, supplierName, supplierQuestion, clientQuestion, testTime, subscriptionTime, app) {
+                return `PROMOT DE VENDAS - SERVIÇO DE STREAMING
 
-DADOS DO VENDEDOR:
-• Nome: ${username}
-• Fornecedor: ${supplier}
-• Aplicativo utilizado: ${app}
+INFORMAÇÕES DO CLIENTE:
+• Nome do Cliente: ${clientName}
+• Fornecedor: ${supplierName}
+• App de comunicação: ${app}
 
-CONTEXTO DA VENDA:
-• O vendedor precisa saber: ${question}
-• O assunto trata-se de: ${subject}
+CONTEXTO DA CONVERSA:
+• O fornecedor quer saber: ${supplierQuestion}
+• O cliente quer saber sobre o streaming: ${clientQuestion}
 
-DETALHES DO PLANO:
-• Período de teste: ${testHours} horas
-• Duração do plano: ${planDays} dias
+CONDIÇÕES DO SERVIÇO:
+• Tempo de teste: ${testTime} horas
+• Tempo de assinatura: ${subscriptionTime} dias
 
-PROMPT PARA GERAÇÃO DE RESPOSTA:
-"Como representante da ${company}, preciso de uma resposta eficaz para a seguinte situação:
+PROMPT PARA RESPOSTA DO VENDEDOR:
+"Preciso de uma resposta para enviar ao cliente ${clientName} via ${app} que:
 
-O cliente está interessado em ${subject} e quer saber especificamente sobre: ${question}
+1. Responda à pergunta do cliente sobre: ${clientQuestion}
+2. Obtenha as informações que preciso saber: ${supplierQuestion}
+3. Destaque os benefícios do nosso serviço de streaming
+4. Explique o período de teste de ${testTime} horas
+5. Apresente as vantagens da assinatura de ${subscriptionTime} dias
+6. Seja persuasiva mas natural para o ${app}
 
-Preciso de uma abordagem que:
-1. Seja persuasiva, mas não agressiva
-2. Destaque os benefícios do nosso produto/serviço
-3. Aborde as preocupações comuns relacionadas a ${subject}
-4. Inclua informações sobre o período de teste de ${testHours} horas
-5. Explique as vantagens do plano de ${planDays} dias
-6. Seja adequada para comunicação via ${app}
+A resposta deve ser:
+- Clara e direta
+- Com linguagem adequada para o ${app}
+- Com call-to-action para agendar demonstração
+- Com tom amigável e profissional
 
-Por favor, forneça uma resposta que possa ser usada diretamente ou adaptada para essa situação específica."
-
-OBSERVAÇÕES FINAIS:
-• Manter tom profissional e amigável
-• Incluir chamada para ação clara
-• Personalizar com detalhes específicos quando necessário
-• Focar na solução que oferecemos para o problema do cliente
-
-EXEMPLO DE ESTRUTURA SUGERIDA:
-1. Saudação personalizada
-2. Reconhecimento da necessidade do cliente
-3. Apresentação da solução
-4. Destaque dos benefícios
-5. Informações sobre teste e plano
-6. Chamada para ação
-7. Encerramento cordial`;
-            }
-            
-            function addToHistory(username, supplier, subject, date) {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <strong>${subject}</strong>
-                    <div class="date">${date.toLocaleString('pt-BR')} - ${username}</div>
-                `;
-                
-                // Adicionar no início da lista
-                historyList.insertBefore(historyItem, historyList.firstChild);
-                
-                // Limitar a 5 itens no histórico
-                if (historyList.children.length > 5) {
-                    historyList.removeChild(historyList.lastChild);
-                }
-            }
-            
-            function loadTemplate(template) {
-                // Preencher formulário com base no template selecionado
-                switch(template) {
-                    case 'venda-produto':
-                        document.getElementById('question').value = "Quais são os benefícios do produto e como ele resolve minhas necessidades?";
-                        document.getElementById('subject').value = "Venda do produto X com foco em benefícios e solução de problemas";
-                        document.getElementById('testHours').value = "3";
-                        document.getElementById('planDays').value = "30";
-                        break;
-                    case 'agendamento-teste':
-                        document.getElementById('question').value = "Como agendar uma demonstração e quais são os próximos passos?";
-                        document.getElementById('subject').value = "Agendamento de demonstração do produto/serviço";
-                        document.getElementById('testHours').value = "2";
-                        document.getElementById('planDays').value = "14";
-                        break;
-                    case 'pos-venda':
-                        document.getElementById('question').value = "Quais suportes estão disponíveis após a compra e como acessá-los?";
-                        document.getElementById('subject').value = "Suporte pós-venda e garantia do produto";
-                        document.getElementById('testHours').value = "0";
-                        document.getElementById('planDays').value = "365";
-                        break;
-                }
-                
-                // Atualizar contadores
-                document.getElementById('question').dispatchEvent(new Event('input'));
-                document.getElementById('subject').dispatchEvent(new Event('input'));
-                
-                showNotification('Template carregado com sucesso! Preencha os demais campos e clique em Gerar Prompt.');
+Por favor, gere uma resposta completa que eu possa usar diretamente na conversa."`;
             }
         });
     </script>
