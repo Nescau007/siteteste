@@ -11,6 +11,8 @@
             --light: #f5f7fa;
             --dark: #333;
             --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
         }
         
         * {
@@ -47,6 +49,8 @@
         .description {
             color: #666;
             font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .form-container {
@@ -59,6 +63,7 @@
         
         .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
         
         label {
@@ -67,12 +72,32 @@
             font-weight: 600;
         }
         
+        .input-info {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-info i {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+        
         input, select, textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
         }
         
         textarea {
@@ -89,13 +114,19 @@
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             display: block;
             width: 100%;
         }
         
         .btn:hover {
             background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
         }
         
         .result-container {
@@ -104,6 +135,12 @@
             padding: 25px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .result-header {
@@ -125,6 +162,11 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: #218838;
         }
         
         .prompt-text {
@@ -133,6 +175,7 @@
             border-radius: 5px;
             white-space: pre-line;
             line-height: 1.5;
+            border-left: 4px solid var(--primary);
         }
         
         .tips {
@@ -148,6 +191,117 @@
             color: var(--primary);
         }
         
+        .analysis-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff9e6;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .analysis-container h3 {
+            margin-bottom: 10px;
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+        }
+        
+        .analysis-container h3 i {
+            margin-right: 8px;
+        }
+        
+        .character-count {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background-color: #eee;
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #999;
+            z-index: 2;
+        }
+        
+        .step.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .step-line {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #eee;
+            z-index: 1;
+        }
+        
+        .step-line-progress {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 2px;
+            background-color: var(--primary);
+            z-index: 1;
+            transition: width 0.3s;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 10px;
@@ -156,156 +310,455 @@
             .form-container, .result-container {
                 padding: 15px;
             }
+            
+            .btn-group {
+                flex-direction: column;
+            }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Gerador de Prompt para Abordagem</h1>
-            <p class="description">Crie mensagens personalizadas e eficazes para suas abordagens comerciais</p>
+            <p class="description">Crie mensagens personalizadas e eficazes para suas abordagens comerciais com base no contexto do seu negócio</p>
         </header>
         
         <div class="form-container">
+            <div class="step-indicator">
+                <div class="step active" id="step1">1</div>
+                <div class="step" id="step2">2</div>
+                <div class="step" id="step3">3</div>
+                <div class="step-line"></div>
+                <div class="step-line-progress" id="step-progress"></div>
+            </div>
+            
             <form id="prompt-form">
-                <div class="form-group">
-                    <label for="target-company">Nome da empresa ou alvo:</label>
-                    <input type="text" id="target-company" required placeholder="Ex: Empresa ABC">
+                <div class="form-section active" id="section1">
+                    <div class="form-group">
+                        <label for="target-company">Nome da empresa ou pessoa que você deseja abordar:</label>
+                        <input type="text" id="target-company" required placeholder="Ex: Empresa ABC, João Silva">
+                        <div class="input-info">
+                            <i class="fas fa-info-circle"></i>
+                            Inclua o nome correto para personalização da mensagem
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user-name">Seu nome:</label>
+                        <input type="text" id="user-name" required placeholder="Ex: Maria Santos">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user-company">Nome da sua empresa:</label>
+                        <input type="text" id="user-company" required placeholder="Ex: Soluções XYZ">
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn" id="next1">Próximo <i class="fas fa-arrow-right"></i></button>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="user-name">Seu nome:</label>
-                    <input type="text" id="user-name" required placeholder="Ex: João Silva">
+                <div class="form-section" id="section2">
+                    <div class="form-group">
+                        <label for="offer">Descreva o que você oferece:</label>
+                        <textarea id="offer" required placeholder="Ex: Desenvolvemos sites responsivos e modernos para pequenas empresas, com foco em performance e conversão"></textarea>
+                        <div class="character-count">0/250</div>
+                        <div class="progress-bar">
+                            <div class="progress" id="offer-progress"></div>
+                        </div>
+                        <div class="input-info">
+                            <i class="fas fa-lightbulb"></i>
+                            Seja específico sobre seu produto/serviço e diferencial competitivo
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="benefits">Quais os principais benefícios para o cliente?</label>
+                        <textarea id="benefits" required placeholder="Ex: Aumento de 30% nas vendas online, redução de custos com marketing, melhor experiência para o usuário"></textarea>
+                        <div class="character-count">0/250</div>
+                        <div class="progress-bar">
+                            <div class="progress" id="benefits-progress"></div>
+                        </div>
+                        <div class="input-info">
+                            <i class="fas fa-chart-line"></i>
+                            Foque em resultados mensuráveis e problemas que você resolve
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" id="prev2"><i class="fas fa-arrow-left"></i> Anterior</button>
+                        <button type="button" class="btn" id="next2">Próximo <i class="fas fa-arrow-right"></i></button>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="user-company">Nome da sua empresa:</label>
-                    <input type="text" id="user-company" required placeholder="Ex: Soluções XYZ">
+                <div class="form-section" id="section3">
+                    <div class="form-group">
+                        <label for="tone">Tom de linguagem:</label>
+                        <select id="tone" required>
+                            <option value="" disabled selected>Selecione um tom</option>
+                            <option value="formal">Formal (recomendado para primeira abordagem)</option>
+                            <option value="informal">Informal (para contatos mais próximos)</option>
+                            <option value="amigavel">Amigável (equilíbrio entre profissional e próximo)</option>
+                            <option value="persuasivo">Persuasivo (focado em resultados)</option>
+                            <option value="diretivo">Direto (para públicos mais técnicos)</option>
+                        </select>
+                        <div class="input-info">
+                            <i class="fas fa-comment"></i>
+                            Escolha o tom que melhor se adequa ao seu público-alvo
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="channel">Canal de comunicação:</label>
+                        <select id="channel" required>
+                            <option value="" disabled selected>Selecione um canal</option>
+                            <option value="email">E-mail</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="telefone">Telefone</option>
+                            <option value="pessoal">Pessoalmente</option>
+                        </select>
+                        <div class="input-info">
+                            <i class="fas fa-share-alt"></i>
+                            O canal influencia o formato e extensão da mensagem
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" id="prev3"><i class="fas fa-arrow-left"></i> Anterior</button>
+                        <button type="submit" class="btn"><i class="fas fa-magic"></i> Gerar Prompt de Abordagem</button>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="offer">O que você oferece:</label>
-                    <textarea id="offer" required placeholder="Descreva brevemente seu produto ou serviço"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="benefits">Por que o alvo deve aceitar seu serviço:</label>
-                    <textarea id="benefits" required placeholder="Descreva os principais benefícios"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="tone">Tom de linguagem:</label>
-                    <select id="tone" required>
-                        <option value="" disabled selected>Selecione um tom</option>
-                        <option value="formal">Formal</option>
-                        <option value="informal">Informal</option>
-                        <option value="amigavel">Amigável</option>
-                        <option value="persuasivo">Persuasivo</option>
-                        <option value="diretivo">Direto</option>
-                    </select>
-                </div>
-                
-                <button type="submit" class="btn">Gerar Prompt de Abordagem</button>
             </form>
+        </div>
+        
+        <div class="analysis-container" id="analysis-container">
+            <h3><i class="fas fa-search"></i> Análise do seu contexto</h3>
+            <div id="analysis-text"></div>
         </div>
         
         <div class="result-container" id="result-container">
             <div class="result-header">
-                <h2 class="result-title">Seu Prompt de Abordagem</h2>
-                <button class="copy-btn" id="copy-btn">Copiar</button>
+                <h2 class="result-title">Sua Mensagem de Abordagem</h2>
+                <button class="copy-btn" id="copy-btn"><i class="fas fa-copy"></i> Copiar</button>
             </div>
             <div class="prompt-text" id="prompt-text"></div>
             <div class="tips">
-                <h3>Dicas para uma abordagem eficaz:</h3>
+                <h3><i class="fas fa-lightbulb"></i> Dicas para uma abordagem eficaz:</h3>
                 <ul>
-                    <li>Personalize a mensagem com informações específicas do cliente</li>
-                    <li>Mantenha o texto curto e direto ao ponto</li>
+                    <li>Personalize ainda mais a mensagem com informações específicas do cliente</li>
+                    <li>Mantenha o texto adequado ao canal escolhido</li>
                     <li>Destaque os benefícios mais relevantes para o cliente</li>
-                    <li>Inclua um call-to-action claro</li>
+                    <li>Inclua um call-to-action claro e específico</li>
+                    <li>Siga em até 48h se não houver resposta</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('prompt-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Elementos do DOM
+        const form = document.getElementById('prompt-form');
+        const sections = document.querySelectorAll('.form-section');
+        const steps = document.querySelectorAll('.step');
+        const stepProgress = document.getElementById('step-progress');
+        const nextButtons = document.querySelectorAll('[id^="next"]');
+        const prevButtons = document.querySelectorAll('[id^="prev"]');
+        const resultContainer = document.getElementById('result-container');
+        const analysisContainer = document.getElementById('analysis-container');
+        const analysisText = document.getElementById('analysis-text');
+        const copyBtn = document.getElementById('copy-btn');
+        const promptText = document.getElementById('prompt-text');
+        const offerTextarea = document.getElementById('offer');
+        const benefitsTextarea = document.getElementById('benefits');
+        const offerProgress = document.getElementById('offer-progress');
+        const benefitsProgress = document.getElementById('benefits-progress');
+        const offerCount = offerTextarea.parentElement.querySelector('.character-count');
+        const benefitsCount = benefitsTextarea.parentElement.querySelector('.character-count');
+        
+        // Variáveis de estado
+        let currentSection = 0;
+        
+        // Funções de navegação
+        function updateNavigation() {
+            // Atualizar indicadores de passo
+            steps.forEach((step, index) => {
+                if (index === currentSection) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
             
-            // Obter valores do formulário
-            const targetCompany = document.getElementById('target-company').value;
-            const userName = document.getElementById('user-name').value;
-            const userCompany = document.getElementById('user-company').value;
-            const offer = document.getElementById('offer').value;
-            const benefits = document.getElementById('benefits').value;
-            const tone = document.getElementById('tone').value;
+            // Atualizar barra de progresso
+            const progressWidth = (currentSection / (sections.length - 1)) * 100;
+            stepProgress.style.width = `${progressWidth}%`;
             
-            // Gerar prompt baseado no tom selecionado
+            // Mostrar/ocultar seções
+            sections.forEach((section, index) => {
+                if (index === currentSection) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        }
+        
+        // Event listeners para navegação
+        nextButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (validateSection(currentSection)) {
+                    currentSection++;
+                    updateNavigation();
+                    // Rolar para o topo da seção
+                    window.scrollTo({ top: document.querySelector('.form-container').offsetTop - 20, behavior: 'smooth' });
+                }
+            });
+        });
+        
+        prevButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentSection--;
+                updateNavigation();
+                // Rolar para o topo da seção
+                window.scrollTo({ top: document.querySelector('.form-container').offsetTop - 20, behavior: 'smooth' });
+            });
+        });
+        
+        // Validação de seção
+        function validateSection(sectionIndex) {
+            const currentSection = sections[sectionIndex];
+            const inputs = currentSection.querySelectorAll('input, textarea, select');
+            
+            for (let input of inputs) {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    alert(`Por favor, preencha o campo: ${input.previousElementSibling.textContent}`);
+                    input.focus();
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // Atualizar contadores de caracteres
+        function updateCharacterCount(textarea, countElement, progressElement) {
+            const count = textarea.value.length;
+            const maxLength = 250;
+            countElement.textContent = `${count}/${maxLength}`;
+            
+            // Atualizar barra de progresso
+            const progress = (count / maxLength) * 100;
+            progressElement.style.width = `${Math.min(progress, 100)}%`;
+            
+            // Mudar cor se estiver perto do limite
+            if (count > maxLength * 0.8) {
+                countElement.style.color = count > maxLength ? '#dc3545' : '#ffc107';
+            } else {
+                countElement.style.color = '#999';
+            }
+        }
+        
+        // Event listeners para contadores
+        offerTextarea.addEventListener('input', () => {
+            updateCharacterCount(offerTextarea, offerCount, offerProgress);
+        });
+        
+        benefitsTextarea.addEventListener('input', () => {
+            updateCharacterCount(benefitsTextarea, benefitsCount, benefitsProgress);
+        });
+        
+        // Inicializar contadores
+        updateCharacterCount(offerTextarea, offerCount, offerProgress);
+        updateCharacterCount(benefitsTextarea, benefitsCount, benefitsProgress);
+        
+        // Analisar contexto do usuário
+        function analyzeContext(formData) {
+            const analysis = [];
+            
+            // Analisar oferta
+            const offer = formData.offer.toLowerCase();
+            if (offer.includes('site') || offer.includes('web') || offer.includes('aplicativo')) {
+                analysis.push("Identificamos que você oferece soluções digitais. Isso é muito relevante no mercado atual.");
+            }
+            
+            if (offer.includes('consultoria') || offer.includes('assessoria') || offer.includes('consulting')) {
+                analysis.push("Seu serviço é baseado em conhecimento especializado. Destaque sua expertise na abordagem.");
+            }
+            
+            if (offer.includes('marketing') || offer.includes('vendas') || offer.includes('publicidade')) {
+                analysis.push("Você atua na área comercial. Foque em resultados mensuráveis e ROI na sua mensagem.");
+            }
+            
+            // Analisar benefícios
+            const benefits = formData.benefits.toLowerCase();
+            const benefitWords = ['aumento', 'redução', 'melhoria', 'economia', 'crescimento', 'otimização'];
+            const hasQuantifiableBenefits = benefitWords.some(word => benefits.includes(word));
+            
+            if (hasQuantifiableBenefits) {
+                analysis.push("Seus benefícios são mensuráveis - isso é excelente para persuasão!");
+            } else {
+                analysis.push("Tente incluir benefícios quantificáveis (ex: 'aumento de 30% nas vendas') para maior impacto.");
+            }
+            
+            // Analisar tom e canal
+            if (formData.tone === 'formal' && formData.channel === 'whatsapp') {
+                analysis.push("Cuidado: tom formal no WhatsApp pode parecer muito distante. Considere ajustar para um tom mais amigável.");
+            }
+            
+            if (formData.tone === 'diretivo' && formData.channel === 'email') {
+                analysis.push("Tom direto pode funcionar bem por e-mail, especialmente com públicos técnicos ou ocupados.");
+            }
+            
+            return analysis;
+        }
+        
+        // Gerar prompt melhorado
+        function generateEnhancedPrompt(formData) {
+            const { targetCompany, userName, userCompany, offer, benefits, tone, channel } = formData;
+            
+            // Análise de palavras-chave para personalização
+            const offerWords = offer.toLowerCase().split(' ');
+            const benefitWords = benefits.toLowerCase().split(' ');
+            
+            // Detectar setor da empresa alvo (baseado no nome)
+            let industry = "empresa";
+            const companyName = targetCompany.toLowerCase();
+            
+            if (companyName.includes('tech') || companyName.includes('tecnologia') || 
+                companyName.includes('software') || companyName.includes('sistema')) {
+                industry = "empresa de tecnologia";
+            } else if (companyName.includes('consultoria') || companyName.includes('consulting')) {
+                industry = "consultoria";
+            } else if (companyName.includes('marketing') || companyName.includes('publicidade')) {
+                industry = "empresa de marketing";
+            } else if (companyName.includes('comércio') || companyName.includes('comercio') || 
+                       companyName.includes('vendas') || companyName.includes('loja')) {
+                industry = "empresa comercial";
+            }
+            
+            // Templates melhorados com base na análise
             let prompt = '';
+            let greeting = '';
+            let introduction = '';
+            let valueProposition = '';
+            let callToAction = '';
+            let signature = '';
             
+            // Saudação baseada no tom e canal
             switch(tone) {
                 case 'formal':
-                    prompt = `Prezado(a) responsável pela ${targetCompany},\n\n` +
-                             `Meu nome é ${userName}, representante da ${userCompany}.\n\n` +
-                             `Gostaria de apresentar nossa solução: ${offer}.\n\n` +
-                             `Acreditamos que nossa proposta trará benefícios significativos para sua empresa, como: ${benefits}.\n\n` +
-                             `Ficaria honrado(a) com a oportunidade de discutir como podemos agregar valor à ${targetCompany}.\n\n` +
-                             `Atenciosamente,\n${userName}`;
+                    greeting = `Prezado(a) responsável pela ${targetCompany},`;
                     break;
-                    
                 case 'informal':
-                    prompt = `Olá, equipe da ${targetCompany}!\n\n` +
-                             `Sou ${userName} da ${userCompany}.\n\n` +
-                             `Quero compartilhar com vocês nossa solução: ${offer}.\n\n` +
-                             `Com ela, vocês podem obter benefícios como: ${benefits}.\n\n` +
-                             `Vamos conversar sobre como podemos ajudar a ${targetCompany}?\n\n` +
-                             `Abraços,\n${userName}`;
+                    greeting = `Olá, equipe da ${targetCompany}!`;
                     break;
-                    
                 case 'amigavel':
-                    prompt = `Oi, pessoal da ${targetCompany}!\n\n` +
-                             `Meu nome é ${userName} e trabalho na ${userCompany}.\n\n` +
-                             `Estou entrando em contato para apresentar nossa solução: ${offer}.\n\n` +
-                             `Achamos que vocês vão adorar os benefícios que oferecemos: ${benefits}.\n\n` +
-                             `Que tal uma conversa rápida para explorarmos essa parceria?\n\n` +
-                             `Grande abraço,\n${userName}`;
+                    greeting = `Oi, pessoal da ${targetCompany}!`;
                     break;
-                    
                 case 'persuasivo':
-                    prompt = `Prezados, ${targetCompany}\n\n` +
-                             `Sou ${userName}, da ${userCompany}, e tenho uma oportunidade que pode transformar seus resultados.\n\n` +
-                             `Oferecemos: ${offer}.\n\n` +
-                             `Imagine os benefícios: ${benefits}.\n\n` +
-                             `Esta é a solução que sua empresa precisa para alcançar novos patamares.\n\n` +
-                             `Vamos agendar uma breve conversa para detalharmos como podemos impulsionar o crescimento da ${targetCompany}?\n\n` +
-                             `Atenciosamente,\n${userName}`;
+                    greeting = `Prezados, ${targetCompany}`;
                     break;
-                    
                 case 'diretivo':
-                    prompt = `${targetCompany},\n\n` +
-                             `${userName} da ${userCompany}.\n\n` +
-                             `Oferecemos: ${offer}.\n\n` +
-                             `Benefícios: ${benefits}.\n\n` +
-                             `Interessado? Vamos conversar.\n\n` +
-                             `${userName}`;
+                    greeting = `${targetCompany},`;
                     break;
             }
             
+            // Introdução personalizada
+            introduction = `Meu nome é ${userName} e represento a ${userCompany}.`;
+            
+            // Proposta de valor contextualizada
+            if (tone === 'persuasivo') {
+                valueProposition = `Tenho uma oportunidade que pode transformar significativamente os resultados da sua ${industry}. Oferecemos ${offer.toLowerCase()}, com benefícios como ${benefits.toLowerCase()}.`;
+            } else if (tone === 'diretivo') {
+                valueProposition = `Oferecemos: ${offer}. Benefícios: ${benefits}.`;
+            } else {
+                valueProposition = `Gostaria de apresentar nossa solução: ${offer}. Acreditamos que nossa proposta trará benefícios importantes para sua ${industry}, como: ${benefits}.`;
+            }
+            
+            // Call-to-action contextual
+            if (channel === 'email') {
+                callToAction = `Podemos agendar uma breve reunião para discutir como podemos agregar valor à ${targetCompany}?`;
+            } else if (channel === 'linkedin') {
+                callToAction = `Vamos conectar e explorar possibilidades de colaboração?`;
+            } else if (channel === 'whatsapp') {
+                callToAction = `Podemos conversar rapidamente sobre isso?`;
+            } else {
+                callToAction = `Gostaria de conversar sobre como podemos ajudar a ${targetCompany}?`;
+            }
+            
+            // Assinatura baseada no tom
+            switch(tone) {
+                case 'formal':
+                    signature = `Atenciosamente,\n${userName}`;
+                    break;
+                case 'informal':
+                    signature = `Abraços,\n${userName}`;
+                    break;
+                case 'amigavel':
+                    signature = `Grande abraço,\n${userName}`;
+                    break;
+                case 'persuasivo':
+                    signature = `Atenciosamente,\n${userName}`;
+                    break;
+                case 'diretivo':
+                    signature = `${userName}`;
+                    break;
+            }
+            
+            // Montar o prompt final
+            prompt = `${greeting}\n\n${introduction}\n\n${valueProposition}\n\n${callToAction}\n\n${signature}`;
+            
+            return prompt;
+        }
+        
+        // Event listener para o formulário
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateSection(currentSection)) return;
+            
+            // Obter valores do formulário
+            const formData = {
+                targetCompany: document.getElementById('target-company').value,
+                userName: document.getElementById('user-name').value,
+                userCompany: document.getElementById('user-company').value,
+                offer: document.getElementById('offer').value,
+                benefits: document.getElementById('benefits').value,
+                tone: document.getElementById('tone').value,
+                channel: document.getElementById('channel').value
+            };
+            
+            // Analisar contexto
+            const analysis = analyzeContext(formData);
+            
+            // Exibir análise
+            if (analysis.length > 0) {
+                analysisText.innerHTML = '<ul>' + analysis.map(item => `<li>${item}</li>`).join('') + '</ul>';
+                analysisContainer.style.display = 'block';
+            }
+            
+            // Gerar prompt
+            const prompt = generateEnhancedPrompt(formData);
+            
             // Exibir resultado
-            document.getElementById('prompt-text').textContent = prompt;
-            document.getElementById('result-container').style.display = 'block';
+            promptText.textContent = prompt;
+            resultContainer.style.display = 'block';
             
             // Rolar para o resultado
-            document.getElementById('result-container').scrollIntoView({ behavior: 'smooth' });
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
         });
         
         // Copiar para área de transferência
-        document.getElementById('copy-btn').addEventListener('click', function() {
+        copyBtn.addEventListener('click', function() {
             const promptText = document.getElementById('prompt-text').textContent;
             navigator.clipboard.writeText(promptText).then(function() {
-                const originalText = this.textContent;
-                this.textContent = 'Copiado!';
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check"></i> Copiado!';
                 setTimeout(() => {
-                    this.textContent = originalText;
+                    this.innerHTML = originalText;
                 }, 2000);
             }.bind(this));
         });
