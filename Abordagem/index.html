@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Prompt para Abordagem</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #6b8cbc;
+            --light: #f5f7fa;
+            --dark: #333;
+            --success: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        .result-container {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .result-title {
+            color: var(--primary);
+        }
+        
+        .copy-btn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .prompt-text {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+        
+        .tips {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f5ff;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .tips h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-container, .result-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gerador de Prompt para Abordagem</h1>
+            <p class="description">Crie mensagens personalizadas e eficazes para suas abordagens comerciais</p>
+        </header>
+        
+        <div class="form-container">
+            <form id="prompt-form">
+                <div class="form-group">
+                    <label for="target-company">Nome da empresa ou alvo:</label>
+                    <input type="text" id="target-company" required placeholder="Ex: Empresa ABC">
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-name">Seu nome:</label>
+                    <input type="text" id="user-name" required placeholder="Ex: João Silva">
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-company">Nome da sua empresa:</label>
+                    <input type="text" id="user-company" required placeholder="Ex: Soluções XYZ">
+                </div>
+                
+                <div class="form-group">
+                    <label for="offer">O que você oferece:</label>
+                    <textarea id="offer" required placeholder="Descreva brevemente seu produto ou serviço"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="benefits">Por que o alvo deve aceitar seu serviço:</label>
+                    <textarea id="benefits" required placeholder="Descreva os principais benefícios"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tone">Tom de linguagem:</label>
+                    <select id="tone" required>
+                        <option value="" disabled selected>Selecione um tom</option>
+                        <option value="formal">Formal</option>
+                        <option value="informal">Informal</option>
+                        <option value="amigavel">Amigável</option>
+                        <option value="persuasivo">Persuasivo</option>
+                        <option value="diretivo">Direto</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">Gerar Prompt de Abordagem</button>
+            </form>
+        </div>
+        
+        <div class="result-container" id="result-container">
+            <div class="result-header">
+                <h2 class="result-title">Seu Prompt de Abordagem</h2>
+                <button class="copy-btn" id="copy-btn">Copiar</button>
+            </div>
+            <div class="prompt-text" id="prompt-text"></div>
+            <div class="tips">
+                <h3>Dicas para uma abordagem eficaz:</h3>
+                <ul>
+                    <li>Personalize a mensagem com informações específicas do cliente</li>
+                    <li>Mantenha o texto curto e direto ao ponto</li>
+                    <li>Destaque os benefícios mais relevantes para o cliente</li>
+                    <li>Inclua um call-to-action claro</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('prompt-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obter valores do formulário
+            const targetCompany = document.getElementById('target-company').value;
+            const userName = document.getElementById('user-name').value;
+            const userCompany = document.getElementById('user-company').value;
+            const offer = document.getElementById('offer').value;
+            const benefits = document.getElementById('benefits').value;
+            const tone = document.getElementById('tone').value;
+            
+            // Gerar prompt baseado no tom selecionado
+            let prompt = '';
+            
+            switch(tone) {
+                case 'formal':
+                    prompt = `Prezado(a) responsável pela ${targetCompany},\n\n` +
+                             `Meu nome é ${userName}, representante da ${userCompany}.\n\n` +
+                             `Gostaria de apresentar nossa solução: ${offer}.\n\n` +
+                             `Acreditamos que nossa proposta trará benefícios significativos para sua empresa, como: ${benefits}.\n\n` +
+                             `Ficaria honrado(a) com a oportunidade de discutir como podemos agregar valor à ${targetCompany}.\n\n` +
+                             `Atenciosamente,\n${userName}`;
+                    break;
+                    
+                case 'informal':
+                    prompt = `Olá, equipe da ${targetCompany}!\n\n` +
+                             `Sou ${userName} da ${userCompany}.\n\n` +
+                             `Quero compartilhar com vocês nossa solução: ${offer}.\n\n` +
+                             `Com ela, vocês podem obter benefícios como: ${benefits}.\n\n` +
+                             `Vamos conversar sobre como podemos ajudar a ${targetCompany}?\n\n` +
+                             `Abraços,\n${userName}`;
+                    break;
+                    
+                case 'amigavel':
+                    prompt = `Oi, pessoal da ${targetCompany}!\n\n` +
+                             `Meu nome é ${userName} e trabalho na ${userCompany}.\n\n` +
+                             `Estou entrando em contato para apresentar nossa solução: ${offer}.\n\n` +
+                             `Achamos que vocês vão adorar os benefícios que oferecemos: ${benefits}.\n\n` +
+                             `Que tal uma conversa rápida para explorarmos essa parceria?\n\n` +
+                             `Grande abraço,\n${userName}`;
+                    break;
+                    
+                case 'persuasivo':
+                    prompt = `Prezados, ${targetCompany}\n\n` +
+                             `Sou ${userName}, da ${userCompany}, e tenho uma oportunidade que pode transformar seus resultados.\n\n` +
+                             `Oferecemos: ${offer}.\n\n` +
+                             `Imagine os benefícios: ${benefits}.\n\n` +
+                             `Esta é a solução que sua empresa precisa para alcançar novos patamares.\n\n` +
+                             `Vamos agendar uma breve conversa para detalharmos como podemos impulsionar o crescimento da ${targetCompany}?\n\n` +
+                             `Atenciosamente,\n${userName}`;
+                    break;
+                    
+                case 'diretivo':
+                    prompt = `${targetCompany},\n\n` +
+                             `${userName} da ${userCompany}.\n\n` +
+                             `Oferecemos: ${offer}.\n\n` +
+                             `Benefícios: ${benefits}.\n\n` +
+                             `Interessado? Vamos conversar.\n\n` +
+                             `${userName}`;
+                    break;
+            }
+            
+            // Exibir resultado
+            document.getElementById('prompt-text').textContent = prompt;
+            document.getElementById('result-container').style.display = 'block';
+            
+            // Rolar para o resultado
+            document.getElementById('result-container').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Copiar para área de transferência
+        document.getElementById('copy-btn').addEventListener('click', function() {
+            const promptText = document.getElementById('prompt-text').textContent;
+            navigator.clipboard.writeText(promptText).then(function() {
+                const originalText = this.textContent;
+                this.textContent = 'Copiado!';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
+            }.bind(this));
+        });
+    </script>
+</body>
+</html>
